@@ -9,6 +9,7 @@ from camera import VideoCamera
 
 app = Flask(__name__)
 
+cam = VideoCamera()
 
 @app.route("/")
 def index():
@@ -34,7 +35,7 @@ def gen(camera):
 @app.route("/video_feed")
 def video_feed():
 	"""Video streaming route. Put this in the src attribute of an img tag."""
-	return Response(gen(VideoCamera()),
+	return Response(gen(cam),
 			mimetype="multipart/x-mixed-replace; boundary=frame")
 
 
