@@ -1,44 +1,37 @@
-# app.py
-# ref: https://qiita.com/Gyutan/items/1f81afacc7cac0b07526
-
-import cv2
+#!/usr/bin/env python
+from importlib import import_module
 import os
 from flask import Flask, render_template, Response
 
-from camera import VideoCamera
+from camera import Camera
 
 app = Flask(__name__)
 
-cam = VideoCamera()
 
-@app.route("/")
+@app.route('/')
 def index():
-	return "Hello World!"
+    return "Hello World"
 
-@app.route("/stream")
+@app.route('/stream')
 def stream():
-	"""Video streaming home page."""
-	return render_template("stream.html")
+    """Video streaming home page."""
+    return render_template('stream.html')
+
 
 def gen(camera):
-	"""Video streaming generator function."""
-	while True:
-		frame = camera.get_frame()
+    """Video streaming generator function."""
+    while True:
+        frame = camera.get_frame()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
-		# print("after get_frame")
-		if frame is not None:
-			yield (b"--frame\r\n"
-				b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n")
-		else:
-			print("frame is none")
 
-@app.route("/video_feed")
+@app.route('/video_feed')
 def video_feed():
-	"""Video streaming route. Put this in the src attribute of an img tag."""
-	return Response(gen(cam),
-			mimetype="multipart/x-mixed-replace; boundary=frame")
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    return Response(gen(Camera()),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-if __name__ == "__main__":
-	app.debug = True
-	app.run(host="0.0.0.0", port=5010, threaded=True)
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', threaded=True)
