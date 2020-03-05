@@ -3,18 +3,12 @@ from base_camera import BaseCamera
 
 
 class Camera(BaseCamera):
-    video_source = 0
-
     def __init__(self):
         super().__init__()
 
     @staticmethod
-    def set_video_source(source):
-        Camera.video_source = source
-
-    @staticmethod
     def frames():
-        camera = cv2.VideoCapture(Camera.video_source)
+        camera = cv2.VideoCapture(0)
         if not camera.isOpened():
             raise RuntimeError('Could not start camera.')
 
