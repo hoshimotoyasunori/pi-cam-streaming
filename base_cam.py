@@ -10,6 +10,7 @@ except ImportError:
         from _thread import get_ident
 
 
+
 class CameraEvent(object):
     """An Event-like class that signals all active clients when a new frame is
     available.
@@ -45,7 +46,7 @@ class CameraEvent(object):
                 if now - event[1] > 5:
                     remove.append(ident)
 
-        for ident in remove:        
+        for ident in remove:
             del self.events[ident]
 
     def clear(self):
