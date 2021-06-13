@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 from importlib import import_module
 import os
 from flask import Flask, render_template, Response
@@ -13,12 +12,10 @@ def index():
 
 @app.route('/stream')
 def stream():
-    """Video streaming home page."""
     return render_template('stream.html')
 
 
 def gen(camera):
-    """Video streaming generator function."""
     while True:
         frame = camera.get_frame()
         yield (b'--frame\r\n'
@@ -27,8 +24,7 @@ def gen(camera):
 
 @app.route('/video_feed')
 def video_feed():
-    """Video streaming route. Put this in the src attribute of an img tag."""
-    return Response(gen(Camera()),
+        return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
